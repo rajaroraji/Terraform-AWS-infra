@@ -77,6 +77,19 @@ module "route_tables" {
 }
 
 
+# Create the VPC peering connection
+resource "aws_vpc_peering_connection" "vpc_peering" {
+  peer_owner_id           = "<accepter_account_id>"  # Replace with the AWS account ID of the accepter VPC
+  peer_vpc_id             = "<accepter_vpc_id>"      # Replace with the ID of the accepter VPC
+  vpc_id                  = module.vpc.id     # Replace with the ID of the requester VPC
+  auto_accept             = true
+  peer_region             = "<accepter_region>"      # Replace with the region of the accepter VPC
+  allow_remote_vpc_dns_resolution = true
+
+  tags = {
+    Name = "vpc-peering-connection"
+  }
+}
 
 provider "aws" {
   region = var.region
